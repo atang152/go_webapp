@@ -1,0 +1,132 @@
+header nav,
+header nav a,
+header svg {
+    display: flex;
+}
+
+
+header {
+    justify-content: space-between;
+}
+
+
+header div,
+header nav {
+    width: 250px;
+    margin: 0 2rem;
+/*    border: 2px solid red;*/
+}
+
+header nav {
+    justify-content: space-between;
+    /*border: 2px solid hotpink;*/
+}
+
+header div a{
+    justify-content: flex-start;
+    /*border: 2px solid #19B698;*/
+}
+
+header nav a{
+    padding: 0 1rem;
+    /*border: 2px solid #E98B39;*/
+}
+
+header nav a:hover{
+    border-radius: 5px;
+    background-color: dimgray;
+}
+
+.idx-hdr-svg {
+    width: 30px;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* ------------------------------------------- */
+/* ABOVE THE FOLD (atf) */
+/* ------------------------------------------- */
+
+#idx-atf {
+    background-image: url("../img/krystal.jpg");
+    background-position: center;
+}
+
+#idx-atf>div {
+    height: 30vh;
+}
+
+.idx-center-spacebetween{
+    margin-top: 5rem;
+}
+
+#idx-atf h1 {
+    font-size: 2.8rem;
+}
+
+#idx-atf h3 {
+    margin-top: .4rem;
+}
+
+footer nav {
+    display: none;
+}
+
+/* ------------------------------------------- */
+/* STYYLESHEET FOR PRODUCT PAGE
+/* ------------------------------------------- */
+
+#fancy-products {
+    /* LAYOUT */
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+
+    /* DEBUGGING */
+    /*border: 1px solid red;*/
+}
+
+#fancy-products img{
+    /* LAYOUT */
+    width: 70vh;
+    border-radius: 0.2rem;
+
+    /*border: 1px solid green;*/
+}
+
+#fancy-products>div.product-content {
+    /* LAYOUT */
+    width: 50vw;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    margin: 2rem;
+
+    /* DEBUGGING */
+    /*border: 1px solid green;*/
+}
+
+#fancy-products p {
+    width: 80%;
+    font-size: .8rem;
+    line-height: 2rem;
+    text-align: left;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    text-align: left;
+    color: #8A8888;
+}*/
+
+/* ------------------------------------------- */
+/* FOOTER POLICIES
+/* ------------------------------------------- */
+
+footer .policies a {
+    color: black;
+    font-size: 1rem;
+}
