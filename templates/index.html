@@ -56,7 +56,6 @@
         </symbol>
     </svg>
     <!-- END SVG DEFINITIONS -->
-
     <!-- HEADERS AND NAVIGATION -->
     <header>
         <div>
@@ -91,6 +90,7 @@
         </nav>
     </header>
     <!-- END HEADERS AND NAVIGATION -->
+
     <!-- ABOVE THE FOLD (ATF) -->
     <section id="idx-atf">
         <div class="idx-center-spacebetween">
@@ -102,72 +102,67 @@
             <button> FOR SHITS & GIGGLES </button>
         </div>
     </section>
-    <!-- BELOW THE FOLD (BTF) -->
 
+    <!-- BELOW THE FOLD (BTF) -->
     <!-- Empty Blank Spaces -->
     <div id="blankspace"></div>
 
+
+    <!-- Loop through database and query image specifications:
+     url, img location, name and price -->
+    {{ if not .Products }}
+        <p> There are no products available at the moment! </p>
+    {{ else }}
+
     <!-- Images -->
     <section class="btf-images">
+        {{ range $product := .Products }}
         <figure>
-            <a href="fancy-cardigan.html"><img src="../static/img/photo_1.jpg"></a>
-            <figcaption class="product_name">Fancy Cardigan</figcaption>
-            <figcaption class="product_price">HKD 399</figcaption>
+            <a href={{$product.Url}}><img src={{$product.Image}}></a>
+            <figcaption class="product_name">{{$product.Name}}</figcaption>
+            <figcaption class="product_price">HKD {{ $product.Price }}</figcaption>
         </figure>
-        <figure>
-            <img src="../static//img/photo_2.jpg">
-            <figcaption class="product_name">Fancy Dress</figcaption>
-            <figcaption class="product_price">HKD 599</figcaption>
-        </figure>
-        <figure>
-            <img src="../static//img/photo_3.jpg">
-            <figcaption class="product_name">Fancy Coat</figcaption>
-            <figcaption class="product_price">HKD 1888</figcaption>
-        </figure>
-        <figure>
-            <img src="../static//img/photo_4.jpg">
-            <figcaption class="product_name">Fancy Shirt</figcaption>
-            <figcaption class="product_price">HKD 299</figcaption>
-        </figure>
+        {{ end }}
     </section>
-
+    {{end}}
 </body>
 
-    <!-- MOBILE MENU -->
-    <footer>
-        <nav>
-            <a href="#">
-                <svg class="idx-hdr-svg">
-                    <use xlink:href="#home"></use>
-                </svg>
-                Home
-            </a>
-            <a href="#">
-                <svg class="idx-hdr-svg">
-                    <use xlink:href="#briefcase"></use>
-                </svg>
-                Portfolio
-            </a>
-            <a href="#">
-                <svg class="idx-hdr-svg">
-                    <use xlink:href="#pencil"></use>
-                </svg>
-                Edit
-            </a>
-            <a href="#">
-                <svg class="idx-hdr-svg">
-                    <use xlink:href="#gear"></use>
-                </svg>
-                Settings
-            </a>
-        </nav>
-        <div class="divider"><span></span></div>
-        <div class="policies">
-            <a href="#"> Returns Policy </a>
-            <a href="#"> Privacy Policy</a>
-            <a href="#"> Terms and Conditions </a>
-            <a href="#"> Contacts </a>
-        </div>
-    </footer>
-    <!-- END MOBILE MENU -->
+<!-- MOBILE MENU -->
+<footer>
+    <nav>
+        <a href="#">
+            <svg class="idx-hdr-svg">
+                <use xlink:href="#home"></use>
+            </svg>
+            Home
+        </a>
+        <a href="#">
+            <svg class="idx-hdr-svg">
+                <use xlink:href="#briefcase"></use>
+            </svg>
+            Portfolio
+        </a>
+        <a href="#">
+            <svg class="idx-hdr-svg">
+                <use xlink:href="#pencil"></use>
+            </svg>
+            Edit
+        </a>
+        <a href="#">
+            <svg class="idx-hdr-svg">
+                <use xlink:href="#gear"></use>
+            </svg>
+            Settings
+        </a>
+    </nav>
+    <div class="divider"><span></span></div>
+    <div class="policies">
+        <a href="#"> Returns Policy </a>
+        <a href="#"> Privacy Policy</a>
+        <a href="#"> Terms and Conditions </a>
+        <a href="#"> Contacts </a>
+    </div>
+</footer>
+<!-- END MOBILE MENU -->
+
 </html>
