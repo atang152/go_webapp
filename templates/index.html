@@ -90,7 +90,6 @@
         </nav>
     </header>
     <!-- END HEADERS AND NAVIGATION -->
-
     <!-- ABOVE THE FOLD (ATF) -->
     <section id="idx-atf">
         <div class="idx-center-spacebetween">
@@ -102,31 +101,22 @@
             <button> FOR SHITS & GIGGLES </button>
         </div>
     </section>
-
     <!-- BELOW THE FOLD (BTF) -->
     <!-- Empty Blank Spaces -->
+
     <div id="blankspace"></div>
-
-
-    <!-- Loop through database and query image specifications:
-     url, img location, name and price -->
-    {{ if not .Products }}
-        <p> There are no products available at the moment! </p>
-    {{ else }}
-
     <!-- Images -->
-    <section class="btf-images">
-        {{ range $product := .Products }}
-        <figure>
-            <a href={{$product.Url}}><img src={{$product.Image}}></a>
+
+        <section class="btf-images">
+        {{range $product := .}}
+            <figure>
+            <a href="/products/show?name={{$product.Name}}"><img src={{$product.Imgpath}}></a>
             <figcaption class="product_name">{{$product.Name}}</figcaption>
             <figcaption class="product_price">HKD {{ $product.Price }}</figcaption>
-        </figure>
-        {{ end }}
+            </figure>
+        {{end}}
     </section>
-    {{end}}
 </body>
-
 <!-- MOBILE MENU -->
 <footer>
     <nav>

@@ -1,0 +1,5 @@
+id,type,name,url,imgpath,price,currency
+1,Cardigan,Fancy Cardigan,products.html,../static/img/photo_1.jpg,399,HKD
+2,Dress,Fancy Dress,products.html,../static/img/photo_2.jpg,599,HKD
+3,Coat,Fancy Coat,products.html,../static/img/photo_3.jpg,1888,HKD
+4,Shirt,Fancy Shirt,products.html,../static/img/photo_4.jpg,299,HKD
