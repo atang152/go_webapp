@@ -264,7 +264,7 @@ figcaption.product_price{
 }
 
 #fancy-products p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     line-height: 2rem;
     text-align: left;
     margin: 1rem;
@@ -276,80 +276,70 @@ figcaption.product_price{
 }
 
 /* ------------------------------------------- */
-/* FORMATING FORM - Product Size
-/* ------------------------------------------- */
-
-.product-specs{
-    width: 80%;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-
-    /* DEBUGGGING*/
-    /*border: 1px solid #19B698;*/
-}
-
-.product-specs #product-size, #product-color{
-    width: 50%;
-    background-color: #fff;
-    font-size: 3rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-size: 0.625rem;
-    font-weight: bold;
-    padding: 0 1rem;
-    height: 3.1875rem;
-    margin-bottom: 1rem;
-
-    /* FORMATTING*/
-    border: 0.1px solid #ddd;
-    border-left: none;
-    border-right: none;
-}
-
-.product-specs #product-color{
-    border-left: 0.1px solid #ddd;
-    }
-
-
-/* ------------------------------------------- */
 /* FORMATING FORM - Add to Cart
 /* ------------------------------------------- */
 #_add-to-cart-form{
     /* LAYOUT */
-    width: 80%;
+    width: 85%;
+    display: flex;
+    flex-flow: column nowrap;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
     margin-bottom: 2.875rem;
 
     /* FORMATTING */
-    background-color: #eac4b3;
-    border: 2px solid #eac4b3;
     border-radius: 0.1rem;
-}
+    /*border: 2px solid #eac4b3;*/
+    }
 
 #_add-to-cart-btn{
-    width: 100%;
-    background-color: inherit;
+    width: 80%;
+    background-color: #eac4b3;
     line-height: 2.875rem;
     color: #fff;
     font-weight: bold;
 }
 
 /* ------------------------------------------- */
+/* FORMATING FORM - Product Size/Product Color
+/* ------------------------------------------- */
+
+.product-specs #product-size, #product-color{
+    display: inline-flex;
+    width: 49%;
+    background-color: #fff;
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    font-weight: bold;
+    padding: 0 0rem;
+    height: 3.1875rem;
+    margin-bottom: 1rem;
+
+    /*FORMATTING*/
+    border: 0.1px solid #ddd;
+    border-right: none;
+    /*border: 1px solid #19B698;*/
+}
+
+.product-specs #product-color{
+    border-left: 0.1px solid #ddd;
+}
+
+/* ------------------------------------------- */
 /* FORMATING FORM - Shipping and Size Guide
 /* ------------------------------------------- */
 .shipping{
-    font-size: 0.825rem;
+    font-size: 0.65rem;
     color: #eac4b3;
     font-weight: bold;
     line-height: 1.875rem;
 }
 
 .size-guide{
-    font-size: 0.825rem;
+    font-size: 0.65rem;
     color: #4A4848;
 }
 
@@ -366,6 +356,7 @@ footer {
 footer nav{
     display: flex;
     flex-flow: column nowrap;
+
 }
 
 footer nav a{
@@ -385,6 +376,8 @@ footer nav a svg{
     width: 50%;
     height: 5vh;
     fill: currentColor;
+
+
 }
 
 /* ------------------------------------------- */
@@ -396,6 +389,8 @@ footer .divider {
     justify-content: center;
     align-items: center;
     margin: 1rem;
+
+
 }
 
 footer .divider span{
@@ -410,8 +405,10 @@ footer .divider span{
 
 footer .policies {
     display: flex;
-    justify-content: space-between;
+    flex-flow: row nowrap;
+    justify-content: space-around;
     align-items: center;
+    padding: 0.2rem;
     margin: 0.8rem;
     margin-left: 10%;
     margin-right: 10%;

@@ -2,6 +2,7 @@ package products
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/go_webapp/config"
 	"net/http"
 )
@@ -39,4 +40,17 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 	config.TPL.ExecuteTemplate(w, "product.html", p)
 
+}
+
+func AddToCart(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "POST" {
+		//Form submitted
+		r.ParseForm()
+		fmt.Println(r.Form["product-size"])
+		fmt.Println(r.Form["product-color"])
+	} else {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
 }

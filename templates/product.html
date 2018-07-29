@@ -94,6 +94,7 @@
     <section id="fancy-products">
         <figure>
             <img src={{.Imgpath}}>
+            <!-- <img src="../static/img/photo_1.jpg"> -->
         </figure>
         <div class="product-content">
             <h1> {{.Name}} </h1>
@@ -101,7 +102,10 @@
             <p> You already know that our statement pieces and best selling items are Off Shoulder Tops. Now we introduce a new bestseller that it is going to be a classic staple for every wardrobe. The stripped deep V Top is a must have for so many reasons. The major one is that you can wear it with the V on the back showing your sexy backside or the other way around, beautifully exposing your cleavage. An all time piece that you can wear it all day long, all year around.
             <br>
 
-                <div class="product-specs">
+                <!-- ADD TO CART BUTTON -->
+                <form action="/products/addtocart" method="post" enctype="multipart/form" id="_add-to-cart-form">
+
+                    <div class="product-specs">
                     <!-- CHOOSE SIZE -->
                     <select id="product-size" name="product-size">
                         <option value="small">Small</option>
@@ -115,10 +119,6 @@
                         <option value="brown">Brown</option>
                         <option value="white">White</option>
                     </select>
-                </div>
-
-                <!-- ADD TO CART BUTTON -->
-                <form action="#" method="post" enctype="multipart/form" id="_add-to-cart-form">
                     <button type="submit" name="add-to-cart" id="_add-to-cart-btn">ADD TO CART</button>
                 </form>
 

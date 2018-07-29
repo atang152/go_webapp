@@ -13,6 +13,7 @@ func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/products", products.Index)
 	http.HandleFunc("/products/show", products.Show)
+	http.HandleFunc("/products/addtocart", products.AddToCart)
 	http.ListenAndServe(":8080", nil)
 }
 

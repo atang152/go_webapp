@@ -123,10 +123,107 @@ footer nav {
 }*/
 
 /* ------------------------------------------- */
+/* FORMATING FORM - Add to Cart
+/* ------------------------------------------- */
+#_add-to-cart-form{
+    /* LAYOUT */
+    width: 40vw;
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-bottom: 2.875rem;
+
+    /* FORMATTING */
+    border-radius: 0.1rem;
+    /*border: 2px solid #eac4b3;*/
+    }
+
+#_add-to-cart-btn{
+    width: 100%;
+    background-color: #eac4b3;
+    line-height: 2.875rem;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------------------- */
+/* FORMATING FORM - Product Size/Product Color
+/* ------------------------------------------- */
+
+.product-specs #product-size, #product-color{
+    display: inline-flex;
+    width: 49%;
+    background-color: #fff;
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    font-weight: bold;
+    padding: 0 0rem;
+    height: 3.1875rem;
+    margin-bottom: 1rem;
+
+    /*FORMATTING*/
+    border: 0.1px solid #ddd;
+    border-right: none;
+    /*border: 1px solid #19B698;*/
+}
+
+.product-specs #product-color{
+    border-left: 0.1px solid #ddd;
+}
+
+/* ------------------------------------------- */
+/* FORMATING FORM - Shipping and Size Guide
+/* ------------------------------------------- */
+.shipping{
+    font-size: 0.85rem;
+    color: #eac4b3;
+    font-weight: bold;
+    line-height: 1.875rem;
+}
+
+.size-guide{
+    font-size: 0.8rem;
+    color: #4A4848;
+}
+
+/* ------------------------------------------- */
+/* SPAN DIVIDER
+/* ------------------------------------------- */
+
+footer .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+}
+
+footer .divider span{
+    background-color: dimgrey;
+    height: 1px;
+    width: 90%;
+}
+
+/* ------------------------------------------- */
 /* FOOTER POLICIES
 /* ------------------------------------------- */
 
+footer .policies {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.8rem;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    /*border: 1px solid red;*/
+}
+
 footer .policies a {
     color: black;
-    font-size: 1rem;
+    font-size: 0.75rem;
 }
