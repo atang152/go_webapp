@@ -3,14 +3,26 @@ package config
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go_webapp/helper"
 	_ "github.com/lib/pq"
 )
 
 var DB *sql.DB
 
 func init() {
+
 	var err error
-	DB, err = sql.Open("postgres", "postgres://XXXXXX:PASSWORD@localhost/collections?sslmode=disable")
+
+	c, err := LoadConfiguration("config/config.xxjson")
+	if err != nil {
+		panic(err)
+	}
+
+	ls := []string{"postgres://", c.Database.Host, ":", c.Database.Password, "@localhost/collections?sslmode=disable"}
+	login := helper.Concat(ls)
+
+	DB, err = sql.Open("postgres", login)
+
 	if err != nil {
 		panic(err)
 	}
@@ -20,4 +32,5 @@ func init() {
 	}
 
 	fmt.Println("You are connected to your database.")
+
 }
