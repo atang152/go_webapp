@@ -3,7 +3,7 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"github.com/go_webapp/helper"
+	"github.com/atang152/go_webapp/helper"
 	_ "github.com/lib/pq"
 )
 
@@ -22,7 +22,6 @@ func init() {
 	login := helper.Concat(ls)
 
 	DB, err = sql.Open("postgres", login)
-
 	if err != nil {
 		panic(err)
 	}

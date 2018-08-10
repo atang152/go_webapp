@@ -110,7 +110,7 @@
         <section class="btf-images">
         {{range $product := .}}
             <figure>
-            <a href="/products/show?name={{$product.Name}}"><img src={{$product.Imgpath}}></a>
+            <a href="/product/show?name={{$product.Name}}"><img src={{$product.Imgpath}}></a>
             <figcaption class="product_name">{{$product.Name}}</figcaption>
             <figcaption class="product_price">HKD {{ $product.Price }}</figcaption>
             </figure>

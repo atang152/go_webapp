@@ -1,8 +1,8 @@
-package products
+package product
 
 import (
 	"errors"
-	"github.com/go_webapp/config"
+	"github.com/atang152/go_webapp/config"
 	"net/http"
 )
 

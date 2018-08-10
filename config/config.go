@@ -16,7 +16,7 @@ type Config struct {
 }
 
 func LoadConfiguration(file string) (Config, error) {
-	var config Config
+	var c Config
 
 	configFile, err := os.Open(file)
 	defer configFile.Close()
@@ -26,6 +26,6 @@ func LoadConfiguration(file string) (Config, error) {
 	}
 
 	jsonParser := json.NewDecoder(configFile)
-	jsonParser.Decode(&config)
-	return config, err
+	jsonParser.Decode(&c)
+	return c, err
 }

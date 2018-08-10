@@ -1,9 +1,9 @@
-package products
+package product
 
 import (
 	"database/sql"
 	"fmt"
-	"github.com/go_webapp/config"
+	"github.com/atang152/go_webapp/config"
 	"net/http"
 )
 

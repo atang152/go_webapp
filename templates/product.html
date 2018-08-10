@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Hello World.com" content="Learning about Web Dev.">
     <link href="https://fonts.googleapis.com/css?family=Cantarell:400,700|Kotta+One" rel="stylesheet">
-    <link rel="stylesheet" href="../static//css/css_reset.css">
-    <link rel="stylesheet" href="../static//css/main.css">
-    <link rel="stylesheet" href="../static//css/mq_800-plus.css" media="(min-width: 800px" )>
+    <link rel="stylesheet" href="../static/css/css_reset.css">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/css/mq_800-plus.css" media="(min-width: 800px" )>
+
+    <!-- TEST javascript - Zoom in -->
+    <script type="text/javascript" src="../static/js/index.js"></script>
 </head>
 
 <body>
@@ -54,6 +57,16 @@
         c-1.5,2-3.1,3.9-4.6,6c0.7,1.4,1.4,2.8,1.8,4.3l8,1.2c0.7,0.1,1.3,0.8,1.3,1.6V55.8z M50,39.7c-6.2,0-11.2,5-11.2,11.2
         c0,6.2,5,11.2,11.2,11.2c6.2,0,11.2-5,11.2-11.2C61.2,44.7,56.2,39.7,50,39.7z" />
         </symbol>
+        <symbol id="shopping-cart" viewBox="0 0 19.25 19.25">
+            <path d="M19.006,2.97c-0.191-0.219-0.466-0.345-0.756-0.345H4.431L4.236,1.461
+                C4.156,0.979,3.739,0.625,3.25,0.625H1c-0.553,0-1,0.447-1,1s0.447,1,1,1h1.403l1.86,11.164c0.008,0.045,0.031,0.082,0.045,0.124
+                c0.016,0.053,0.029,0.103,0.054,0.151c0.032,0.066,0.075,0.122,0.12,0.179c0.031,0.039,0.059,0.078,0.095,0.112
+                c0.058,0.054,0.125,0.092,0.193,0.13c0.038,0.021,0.071,0.049,0.112,0.065c0.116,0.047,0.238,0.075,0.367,0.075
+                c0.001,0,11.001,0,11.001,0c0.553,0,1-0.447,1-1s-0.447-1-1-1H6.097l-0.166-1H17.25c0.498,0,0.92-0.366,0.99-0.858l1-7
+                C19.281,3.479,19.195,3.188,19.006,2.97z M17.097,4.625l-0.285,2H13.25v-2H17.097z M12.25,4.625v2h-3v-2H12.25z M12.25,7.625v2
+                h-3v-2H12.25z M8.25,4.625v2h-3c-0.053,0-0.101,0.015-0.148,0.03l-0.338-2.03H8.25z M5.264,7.625H8.25v2H5.597L5.264,7.625z
+                 M13.25,9.625v-2h3.418l-0.285,2H13.25z"/>
+        </symbol>
     </svg>
     <!-- END SVG DEFINITIONS -->
     <!-- HEADERS AND NAVIGATION -->
@@ -87,6 +100,11 @@
                     <use xlink:href="#gear"></use>
                 </svg>
             </a>
+<!--             <a href="#">
+                <svg class="idx-hdr-svg">
+                    <use xlink:href="#shopping-cart"></use>
+                </svg>
+            </a> -->
         </nav>
     </header>
     <!-- END HEADERS AND NAVIGATION -->
@@ -103,7 +121,7 @@
             <br>
 
                 <!-- ADD TO CART BUTTON -->
-                <form action="/products/addtocart" method="post" enctype="multipart/form" id="_add-to-cart-form">
+                <form action="/product/addtocart" method="post" enctype="multipart/form" id="_add-to-cart-form">
 
                     <div class="product-specs">
                     <!-- CHOOSE SIZE -->
