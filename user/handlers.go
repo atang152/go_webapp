@@ -23,5 +23,4 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
 		return
 	}
-
 }

@@ -50,7 +50,7 @@ func userNameTaken(r *http.Request) bool {
 		errors.New("400. Bad request. Username must be filled.")
 	}
 
-	// Check if the user name is taken from Database.
+	// Check if the user name is already taken from Database.
 	row := config.DB.QueryRow("SELECT * FROM users WHERE username = $1", u.Username)
 	err := row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
 
@@ -90,6 +90,7 @@ func InsertUser(r *http.Request) (User, error) {
 		if err != nil {
 			return u, errors.New("500. Internal Server Error." + err.Error())
 		}
+
 	} else {
 		return u, errors.New("403. Status Forbidden. Username already taken.")
 	}
