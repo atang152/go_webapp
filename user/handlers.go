@@ -7,20 +7,47 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
+
+	// if AlreadyLoggedIn(r) {
+	// 	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	// 	return
+	// }
+
+	// Insert username
+	if r.Method == http.MethodPost {
+		u, err := InsertUser(r)
+		http.SetCookie(w, u.Cookie)
+		fmt.Println(u)
+
+		if err != nil {
+			http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
+			return
+		}
+		http.Redirect(w, r, "/product", http.StatusSeeOther)
+	}
 	config.TPL.ExecuteTemplate(w, "register.html", nil)
 }
 
-func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
+func Login(w http.ResponseWriter, r *http.Request) {
+
+	// if AlreadyLoggedIn(r) {
+	// 	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	// 	return
+	// }
+
+	if r.Method == http.MethodPost {
+		// Get user information and Authenticate
+		u, err := GetUser(r)
+		if err != nil {
+
+			http.Error(w, err.Error(), http.StatusForbidden)
+			return
+		}
+
+		fmt.Print(u)
+
+		//http.Redirect(w, r, "/product", http.StatusSeeOther)
 	}
 
-	// Insert username
-	u, err := InsertUser(r)
-	fmt.Println(u)
-	if err != nil {
-		http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
-		return
-	}
+	config.TPL.ExecuteTemplate(w, "login.html", nil)
 }

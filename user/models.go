@@ -2,7 +2,9 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"github.com/atang152/go_webapp/config"
+	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
@@ -13,6 +15,7 @@ type User struct {
 	Password  []byte
 	Firstname string
 	Lastname  string
+	Cookie    *http.Cookie
 }
 
 // CREATE TABLE users (
@@ -23,19 +26,90 @@ type User struct {
 //    lastname           TEXT    NOT NULL
 // );
 
-func GetUser(r *http.Request) (User, error) {
-	u := User{}
-	u.Username = r.FormValue("username")
-	// Validate Form Value
-	if u.Username == "" {
-		return u, errors.New("400. Bad request. All fields must be complete.")
+// CREATE TABLE sessions(
+//   id SERIAL PRIMARY KEY NOT NULL,
+//   username TEXT NOT NULL,
+// 	 cookie TEXT NOT NULL
+// );
+
+func createSession() *http.Cookie {
+	sID, _ := uuid.NewV4()
+	c := &http.Cookie{
+		Name:  "session",
+		Value: sID.String(),
+	}
+	return c
+}
+
+func AlreadyLoggedIn(r *http.Request) bool {
+
+	// u := User{}
+
+	c, err := r.Cookie("session")
+	fmt.Println(c.Value)
+	if err != nil {
+		return false
 	}
 
+	// // Query Database for session information
+	// row := config.DB.QueryRow("SELECT * FROM sessions WHERE cookie = $1", c.Value)
+	// err = row.Scan(&u.Username, &u.Cookie.Value)
+
+	// // Cookie is not found in database
+	// if err != nil {
+	// 	errors.New("Cookie not found" + err.Error())
+	// 	fmt.Println("No cookie monster")
+	// 	return false
+	// }
+
+	// // Query user database wtih cookie information
+	// row = config.DB.QueryRow("SELECT * FROM users WHERE username = $1", u.Username)
+	// err = row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
+
+	// // Username associated with cookie is not found in user database
+	// if err != nil {
+	// 	errors.New("Username associated with cookie is not found in user database" + err.Error())
+	// 	fmt.Println("No username with this cookie monster")
+	// 	return false
+	// }
+
+	// fmt.Println("User already logged in")
+	return true
+}
+
+func GetUser(r *http.Request) (User, error) {
+	u := User{}
+
+	// Process form submission
+	u.Username = r.FormValue("username")
+	p := r.FormValue("password")
+
+	// Validate Form Value
+	if u.Username == "" {
+		return u, errors.New("400. Bad request. All fields must be completed.")
+	}
+
+	// Query Database for user information
 	row := config.DB.QueryRow("SELECT * FROM users WHERE username = $1", u.Username)
 	err := row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
 
+	// Username input is not found in database
 	if err != nil {
-		return u, err
+		return u, errors.New("Username and/or password do not match.")
+	}
+
+	// Verify whether password match the stored password
+	err = bcrypt.CompareHashAndPassword(u.Password, []byte(p))
+	if err != nil {
+		return u, errors.New("Username and/or password do not match.")
+	}
+
+	// Create session
+	u.Cookie = createSession()
+	// Insert username-cookie session into Database
+	_, err = config.DB.Exec("INSERT INTO sessions (username, cookie) VALUES($1, $2)", u.Username, u.Cookie.Value)
+	if err != nil {
+		return u, errors.New("500. Internal Server Error." + err.Error())
 	}
 
 	return u, err
@@ -55,6 +129,7 @@ func userNameTaken(r *http.Request) bool {
 	err := row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
 
 	if err != nil {
+		errors.New("500. Internal Server Error." + err.Error())
 		return false
 	}
 
@@ -78,6 +153,14 @@ func InsertUser(r *http.Request) (User, error) {
 	// Check if user name is taken
 	if !userNameTaken(r) {
 
+		u.Cookie = createSession()
+
+		// Insert username-cookie session into Database
+		_, err := config.DB.Exec("INSERT INTO sessions (username, cookie) VALUES($1, $2)", u.Username, u.Cookie.Value)
+		if err != nil {
+			return u, errors.New("500. Internal Server Error." + err.Error())
+		}
+
 		// If user name is not taken then encrypt Form Password Value
 		encrypt_p, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
 		if err != nil {
@@ -85,7 +168,7 @@ func InsertUser(r *http.Request) (User, error) {
 		}
 		u.Password = encrypt_p
 
-		// Insert Values into Database
+		// Insert user info into Database
 		_, err = config.DB.Exec("INSERT INTO users (username, password, firstname, lastname) VALUES($1, $2, $3, $4)", u.Username, u.Password, u.Firstname, u.Lastname)
 		if err != nil {
 			return u, errors.New("500. Internal Server Error." + err.Error())
@@ -98,8 +181,7 @@ func InsertUser(r *http.Request) (User, error) {
 	return u, nil
 }
 
-// var DbUsers = map[string]User{}
-// var DbSessions = map[string]string{}
+// To do should seperate Account and Profile
 
 // type Account struct {
 // 	Type     string `json: "type, omitempty"`
