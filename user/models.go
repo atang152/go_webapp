@@ -1,6 +1,7 @@
 package user
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/atang152/go_webapp/config"
@@ -15,7 +16,13 @@ type User struct {
 	Password  []byte
 	Firstname string
 	Lastname  string
-	Cookie    *http.Cookie
+	Cookie    *http.Cookie // Cookie is not stored in "users" database but inside "sessions" database
+}
+
+type Session struct {
+	Id          string
+	SessionUser string
+	UserCookie  string
 }
 
 // CREATE TABLE users (
@@ -43,37 +50,56 @@ func createSession() *http.Cookie {
 
 func AlreadyLoggedIn(r *http.Request) bool {
 
-	// u := User{}
-
+	// Retrieve session information
 	c, err := r.Cookie("session")
-	fmt.Println(c.Value)
-	if err != nil {
+
+	if c == nil {
+		errors.New("No cookies found in session" + err.Error())
+		fmt.Println("No cookies found in session")
 		return false
 	}
 
-	// // Query Database for session information
-	// row := config.DB.QueryRow("SELECT * FROM sessions WHERE cookie = $1", c.Value)
-	// err = row.Scan(&u.Username, &u.Cookie.Value)
+	if err != nil {
+		errors.New("500. Internal Server Error." + err.Error())
+		return false
+	}
 
-	// // Cookie is not found in database
-	// if err != nil {
-	// 	errors.New("Cookie not found" + err.Error())
-	// 	fmt.Println("No cookie monster")
-	// 	return false
-	// }
+	fmt.Println(c.Value)
 
-	// // Query user database wtih cookie information
-	// row = config.DB.QueryRow("SELECT * FROM users WHERE username = $1", u.Username)
-	// err = row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
+	// Query Database for session information
+	row := config.DB.QueryRow("SELECT id, username, cookie FROM sessions where cookie = $1", c.Value)
 
-	// // Username associated with cookie is not found in user database
-	// if err != nil {
-	// 	errors.New("Username associated with cookie is not found in user database" + err.Error())
-	// 	fmt.Println("No username with this cookie monster")
-	// 	return false
-	// }
+	s := Session{}
+	err = row.Scan(&s.Id, &s.SessionUser, &s.UserCookie)
 
-	// fmt.Println("User already logged in")
+	switch {
+	case err == sql.ErrNoRows:
+		errors.New("Cookie not found" + err.Error())
+		fmt.Println("No cookie monster")
+		return false
+	case err != nil:
+		errors.New("Cookie not found" + err.Error())
+		fmt.Println(err.Error())
+		return false
+	}
+
+	// Query user database wtih cookie information
+	u := User{}
+	row = config.DB.QueryRow("SELECT * FROM users WHERE username = $1", s.SessionUser)
+	err = row.Scan(&u.Id, &u.Username, &u.Password, &u.Firstname, &u.Lastname)
+
+	switch {
+	case err == sql.ErrNoRows:
+		errors.New("Username associated with cookie is not found in user database" + err.Error())
+		fmt.Println("Username associated with cookie is not found in user database")
+		return false
+	case err != nil:
+		errors.New("Username associated with cookie is not found in user database" + err.Error())
+		fmt.Println(err.Error())
+		return false
+	}
+
+	fmt.Println("User already logged in")
 	return true
 }
 
