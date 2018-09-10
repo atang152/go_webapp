@@ -8,7 +8,11 @@ import (
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"time"
 )
+
+// To do. Query Database and review whether session expired
+// Done: Added creation time of cookie
 
 type User struct {
 	Id        string
@@ -23,6 +27,7 @@ type Session struct {
 	Id          string
 	SessionUser string
 	UserCookie  string
+	timeCreated time.Time
 }
 
 // CREATE TABLE users (
@@ -36,16 +41,97 @@ type Session struct {
 // CREATE TABLE sessions(
 //   id SERIAL PRIMARY KEY NOT NULL,
 //   username TEXT NOT NULL,
-// 	 cookie TEXT NOT NULL
+// 	 cookie TEXT NOT NULL,
+//   timeCreated TIME NOT NULL,
 // );
 
-func createSession() *http.Cookie {
+func createSession() (*http.Cookie, time.Time) {
+
+	const sessionLength int = 60
+	var timeCreated time.Time
+
+	// Create Cookie used in web session
 	sID, _ := uuid.NewV4()
 	c := &http.Cookie{
 		Name:  "session",
 		Value: sID.String(),
 	}
-	return c
+	c.MaxAge = sessionLength
+
+	// Store creation time of Cookie into Postgres Database
+	// Note that time.Now() uses current local time configured to your computer
+	timeCreated = time.Now()
+	fmt.Println(timeCreated)
+
+	return c, timeCreated
+}
+
+func CleanSessionDB() {
+	// To Do: Use Arithmetic operation on time values in PostgresDB
+	// Change minutes to a sessionLength
+	_, err := config.DB.Exec("DELETE FROM sessions WHERE timeCreated < $1 - time '00:05';", time.Now())
+
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("No results found")
+		// return errors.New("No results found" + err.Error())
+	case err != nil:
+		fmt.Println(err.Error())
+		// return errors.New("400. Bad request" + err.Error())
+
+	}
+
+	fmt.Println("Cookie sessions in DB cleaned")
+	// return nil
+
+	// rows, err := config.DB.Query("SELECT * FROM sessions")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+
+	// defer rows.Close()
+
+	// sessions := make([]Session, 0)
+
+	// for rows.Next() {
+	// 	s := Session{}
+	// 	err := rows.Scan(&s.Id, &s.SessionUser, &s.UserCookie, &s.timeCreated)
+	// }
+}
+
+func DeleteSession(r *http.Request) error {
+
+	// Retrieve session information
+	c, err := r.Cookie("session")
+
+	if c == nil {
+		fmt.Println("No cookies found in session")
+		return errors.New("No cookies found in session" + err.Error())
+	}
+
+	if err != nil {
+		return errors.New("500. Internal Server Error." + err.Error())
+	}
+
+	fmt.Println(c.Value)
+
+	_, err = config.DB.Exec("DELETE FROM sessions WHERE cookie=$1;", c.Value)
+
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("Cookie not found")
+		return errors.New("No results found" + err.Error())
+	case err != nil:
+		fmt.Println(err.Error())
+		return errors.New("400. Bad request" + err.Error())
+
+	}
+
+	// Clean All Historical sessions
+	CleanSessionDB()
+
+	fmt.Println("Cookie deleted")
+	return nil
 }
 
 func AlreadyLoggedIn(r *http.Request) bool {
@@ -104,9 +190,11 @@ func AlreadyLoggedIn(r *http.Request) bool {
 }
 
 func GetUser(r *http.Request) (User, error) {
-	u := User{}
+
+	var timeCreated time.Time
 
 	// Process form submission
+	u := User{}
 	u.Username = r.FormValue("username")
 	p := r.FormValue("password")
 
@@ -131,9 +219,9 @@ func GetUser(r *http.Request) (User, error) {
 	}
 
 	// Create session
-	u.Cookie = createSession()
+	u.Cookie, timeCreated = createSession()
 	// Insert username-cookie session into Database
-	_, err = config.DB.Exec("INSERT INTO sessions (username, cookie) VALUES($1, $2)", u.Username, u.Cookie.Value)
+	_, err = config.DB.Exec("INSERT INTO sessions (username, cookie, timecreated) VALUES($1, $2, $3)", u.Username, u.Cookie.Value, timeCreated)
 	if err != nil {
 		return u, errors.New("500. Internal Server Error." + err.Error())
 	}
@@ -164,6 +252,8 @@ func userNameTaken(r *http.Request) bool {
 
 func InsertUser(r *http.Request) (User, error) {
 
+	var timeCreated time.Time
+
 	// Get form values
 	u := User{}
 	u.Username = r.FormValue("username")
@@ -179,10 +269,10 @@ func InsertUser(r *http.Request) (User, error) {
 	// Check if user name is taken
 	if !userNameTaken(r) {
 
-		u.Cookie = createSession()
+		u.Cookie, timeCreated = createSession()
 
 		// Insert username-cookie session into Database
-		_, err := config.DB.Exec("INSERT INTO sessions (username, cookie) VALUES($1, $2)", u.Username, u.Cookie.Value)
+		_, err := config.DB.Exec("INSERT INTO sessions (username, cookie, timecreated) VALUES($1, $2, $3)", u.Username, u.Cookie.Value, timeCreated)
 		if err != nil {
 			return u, errors.New("500. Internal Server Error." + err.Error())
 		}

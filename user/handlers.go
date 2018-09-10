@@ -55,19 +55,28 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	config.TPL.ExecuteTemplate(w, "login.html", nil)
 }
 
-func logout(w http.ResponseWriter, r *http.Request) {
+func Logout(w http.ResponseWriter, r *http.Request) {
 
+	// If user is not logged in; redirect back to home
 	if !AlreadyLoggedIn(r) {
-		http.Redirect(w, req, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 	}
 
-	c, err := r.Cookie("session")
-
+	// Delete Session in Database
+	err := DeleteSession(r)
 	if err != nil {
-		http.Error(w, http.StatusText("Internal server error"), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Delete the session
+	// Delete Cookie
+	c := &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		MaxAge: -1,
+	}
 
+	http.SetCookie(w, c)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

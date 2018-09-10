@@ -17,6 +17,7 @@ func main() {
 	http.HandleFunc("/product/addtocart", product.AddToCart)
 	http.HandleFunc("/register", user.Register)
 	http.HandleFunc("/login", user.Login)
+	http.HandleFunc("/logout", user.Logout)
 	http.ListenAndServe(":8080", nil)
 }
 
