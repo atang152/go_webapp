@@ -17,6 +17,16 @@ type Product struct {
 	Currency string
 }
 
+// CREATE TABLE products(
+//   id SERIAL PRIMARY KEY NOT NULL,
+//   type TEXT NOT NULL,
+//   name TEXT NOT NULL,
+//   url TEXT NOT NULL,
+//   imgpath TEXT NOT NULL,
+//   price REAL NOT NULL DEFAULT 0,
+//   currency TEXT NOT NULL
+// );
+
 func AllProduct() ([]Product, error) {
 	rows, err := config.DB.Query("SELECT * FROM products")
 	if err != nil {
