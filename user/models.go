@@ -67,9 +67,8 @@ func createSession() (*http.Cookie, time.Time) {
 }
 
 func CleanSessionDB() {
-	// To Do: Use Arithmetic operation on time values in PostgresDB
-	// Change minutes to a sessionLength
-	_, err := config.DB.Exec("DELETE FROM sessions WHERE timeCreated < $1 - time '00:05';", time.Now())
+	// Clean expired sessions in Postgres Database
+	_, err := config.DB.Exec("DELETE FROM sessions WHERE timeCreated < CURRENT_TIME - time '00:02';")
 
 	switch {
 	case err == sql.ErrNoRows:
@@ -82,24 +81,12 @@ func CleanSessionDB() {
 	}
 
 	fmt.Println("Cookie sessions in DB cleaned")
-	// return nil
-
-	// rows, err := config.DB.Query("SELECT * FROM sessions")
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-
-	// defer rows.Close()
-
-	// sessions := make([]Session, 0)
-
-	// for rows.Next() {
-	// 	s := Session{}
-	// 	err := rows.Scan(&s.Id, &s.SessionUser, &s.UserCookie, &s.timeCreated)
-	// }
 }
 
 func DeleteSession(r *http.Request) error {
+
+	// Clean All Historical sessions
+	CleanSessionDB()
 
 	// Retrieve session information
 	c, err := r.Cookie("session")
@@ -126,9 +113,6 @@ func DeleteSession(r *http.Request) error {
 		return errors.New("400. Bad request" + err.Error())
 
 	}
-
-	// Clean All Historical sessions
-	CleanSessionDB()
 
 	fmt.Println("Cookie deleted")
 	return nil
